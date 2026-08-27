@@ -1,0 +1,17 @@
+name: wa-dnr-portal
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.12
+  - requests
+  - geopandas
+  - shapely
+  - rasterio
+  - gdal
+  - pyproj
+  - numpy
+  - tqdm
+  - jupyterlab
+  - ipykernel
