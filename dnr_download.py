@@ -217,6 +217,7 @@ def download_datasets(geojson, selected_products, output_zip):
     print("\nRequesting DNR download...")
     print("-" * 75)
     print(f"Dataset IDs: {dataset_ids}")
+    print(f"This may take a while if you have lots of data...")
 
     params = {
         "geojson": geojson,
@@ -233,26 +234,11 @@ def download_datasets(geojson, selected_products, output_zip):
         # Check for errors
         response.raise_for_status()
 
-        content_length = int(response.headers.get("content-length", 0))
-        downloaded = 0
-
         with open(output_zip, "wb") as f:
             for chunk in response.iter_content(chunk_size=1024*1024):
                 if not chunk:
                     continue
-
                 f.write(chunk)
-                downloaded += len(chunk)
-
-                if content_length:
-                    percent = 100 * downloaded / content_length
-                    print(
-                        f"\rDownloading: "
-                        f"{downloaded / 1e9:.2f} GB "
-                        f"({percent:.2f}%)",
-                        end="",
-                        flush=True
-                    )
 
         print("\nDownload complete.")
         print(f"Saved to: {output_zip.resolve()}")
