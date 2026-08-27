@@ -77,4 +77,4 @@ The program will:
 6. Crop each project DTM to the exact AOI polygon.
 7. Save the resulting DTMs to the output directory.
 
-> **Note:** The temporary `custom_download` data are overwritten with each run. WA DNR source tiles can be very large, so retaining these files can quickly consume substantial disk space.
+> **Note:** The temporary `custom_download` data are overwritten with each run. WA DNR source tiles can be very large, so we currently trash these with each run to avoid consuming all your disk space.
