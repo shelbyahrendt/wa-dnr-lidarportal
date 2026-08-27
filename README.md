@@ -77,4 +77,4 @@ The program will:
 6. Crop each project DTM to the exact AOI polygon.
 7. Save the resulting DTMs to the output directory.
 
-> **Note:** The temporary `custom_download` data are overwritten with each run. WA DNR source tiles can be very large, so we currently trash these with each run to avoid consuming all your disk space.
+> **Note:** The temporary `custom_download` data are overwritten with each run. WA DNR source tiles can be very large, so we currently trash these with each run to avoid consuming all your disk space. Also, if you change your AOI but do not change your output, if you have a lidar project with the same name within your new AOI the cropped .tif will be overwritten. 
