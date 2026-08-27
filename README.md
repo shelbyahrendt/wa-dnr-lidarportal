@@ -1,1 +1,1 @@
-This repository interfaces with the Washingotn DNR Lidar Portal for direct download and processing of lidar-derived products based on a user-defined AOI.
+This repository interfaces with the Washingotn DNR Lidar Portal (https://lidarportal.dnr.wa.gov/) for direct download and processing of lidar-derived products based on a user-defined AOI.
