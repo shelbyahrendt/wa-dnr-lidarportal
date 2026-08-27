@@ -6,11 +6,12 @@ This repository interfaces with the Washingotn DNR Lidar Portal (https://lidarpo
 
 Install with conda:
 
-1. Clone the repository to your local machine: `git clone https://github.com/shelbyahrendt/wa-dnr-lidarportal.git`
+1. Clone the repository to your local machine:
+- `git clone https://github.com/shelbyahrendt/wa-dnr-lidarportal.git`
 2. Within the repository tree run the following in your terminal
-`conda env create -f environment.yml` (this may take several minutes)
+- `conda env create -f environment.yml` (this may take several minutes)
 3. Activate the environment:
-`conda activate wa-dnr-portal`
+- `conda activate wa-dnr-portal`
 
 ## Test Installation
 
@@ -22,8 +23,8 @@ Test the install by running the workflow on the example AOI included in `data/my
 
 ## Download DTMs for your AOI
 
-1. Create a .shp or .gpk file with a polygon AOI (any crs will do)
+1. Create a `.shp` or `.gpkg` file with a polygon AOI (any crs will do)
 2. Save this in `data` (or your preferred dir)
-3. Modify the `AOI` Path variable in `main.py` to point to the location of this shapefile.
+3. Modify the `AOI` Path variable in `main.py` to point to the location of this shapefile or geopackage.
 4. Modify the `OUTPUT` Path variable in `main.py` to point to your preferred download folder. 
 * (Note: the `custom_download` folder will be overwritten with each run. This is preferred as the WA DNR tiles can be gigantic and we don't want to start accumulating a surplus of large data files.)
