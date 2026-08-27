@@ -6,12 +6,24 @@ This repository interfaces with the Washingotn DNR Lidar Portal (https://lidarpo
 
 Install with conda:
 
-1. Clone the repository to your local machine:
-- `git clone https://github.com/shelbyahrendt/wa-dnr-lidarportal.git`
-2. Within the repository tree run the following in your terminal
-- `conda env create -f environment.yml` (this may take several minutes)
-3. Activate the environment:
-- `conda activate wa-dnr-portal`
+Clone the repository to your local machine:
+
+```bash
+git clone https://github.com/shelbyahrendt/wa-dnr-lidarportal.git
+cd wa-dnr-lidarportal
+```
+
+Create the conda environment (this may take several minutes):
+
+```bash
+conda env create -f environment.yml
+```
+
+Activate the environment:
+
+```bash
+conda activate wa-dnr-portal
+```
 
 ## Test Installation
 
