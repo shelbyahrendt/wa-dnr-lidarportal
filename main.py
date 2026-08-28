@@ -22,8 +22,8 @@ PORTAL_URL = "https://lidarportal.dnr.wa.gov"
 
 # AOI = Path("data/my_aoi.shp") # test with .shp
 AOI = Path("data/nooksack1_AOI.kmz") # test with .kmz
-DOWNLOAD_ZIP = Path("downloads/custom_download.zip")
-OUTPUT_DIR = Path("cropped_dtms")
+DOWNLOAD_ZIP = Path("downloads/custom_download.zip") #this will get created, temp folder to dump downloads
+OUTPUT_DIR = Path("cropped_dtms") #this will get created, final output folder for cropped dtms
 
 # Optional custom output naming: helpful when you want to batch process a bunch of AOIs
 # SET TO NONE IF YOU JUST WANT DEFAULTS! (your cropped tiffs will be named with DNR project name)
