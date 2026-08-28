@@ -55,10 +55,16 @@ In `main.py`, modify the `AOI` path to point to your file:
 AOI = Path("data/my_aoi.shp")
 ```
 
-Modify the `OUTPUT` path to specify where processed DTMs should be saved:
+Modify the `OUTPUT_DIR` path to specify a directory where processed DTMs should be saved:
 
 ```python
 OUTPUT = Path("cropped_DTMs")
+```
+
+Optionally modify the target crs to something relevent for your region. Can also set to `None` to retain the source crs in your cropped DTMs.
+
+```python
+TARGET_CRS = 'EPSG:2927'
 ```
 
 Run the workflow:
