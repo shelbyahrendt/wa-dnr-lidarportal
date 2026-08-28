@@ -58,7 +58,7 @@ AOI = Path("data/my_aoi.shp")
 Modify the `OUTPUT_DIR` path to specify a directory where processed DTMs should be saved:
 
 ```python
-OUTPUT = Path("cropped_DTMs")
+OUTPUT_DIR = Path("cropped_DTMs")
 ```
 
 Optionally modify the target crs to something relevent for your region. Can also set to `None` to retain the source crs in your cropped DTMs.
