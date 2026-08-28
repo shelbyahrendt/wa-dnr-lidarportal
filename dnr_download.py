@@ -136,11 +136,11 @@ def get_dtms(datasets):
     print("\nDTM Product Info:")
     print("-" * 70)
 
-    for d in dtms:
+    for i, d in enumerate(dtms, start=1):
         size_gb = d["bytes"] / 1e9
 
         print(
-            f"- {d['project_name']:<35} "
+            f"[{i}] {d['project_name']:<35} "
             f"ID: {d['dataset_id']:<6} "
             f"Files: {d['files']:<4} "
             f"Size: {size_gb:.2f} GB"

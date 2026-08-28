@@ -8,6 +8,8 @@ import numpy as np
 import rasterio
 from rasterio.merge import merge
 from rasterio.mask import mask
+from rasterio.crs import CRS
+from rasterio.warp import calculate_default_transform, reproject, Resampling
 from shapely.geometry import mapping
 
 
@@ -182,8 +184,62 @@ def process_project(dtm_dir, aoi, output_dir, custom_file_stem=None):
 
     print(f"Saved: {output_path}")
 
+    return output_path
 
-def process_dtms(zip_path, aoi_path, output_dir, custom_file_stem=None):
+def reproject_dtm(src_path, target_crs):
+    """Reproject DTM in place if it is not already in target CRS."""
+
+    target_crs = CRS.from_user_input(target_crs)
+
+    with rasterio.open(src_path) as src:
+
+        # Do nothing if already in target CRS
+        if src.crs == target_crs:
+            print(f"Already in {target_crs} -- no reprojection needed.")
+            return
+
+        print(f"Reprojecting {src.crs} -> {target_crs}")
+
+        transform, width, height = calculate_default_transform(
+            src.crs,
+            target_crs,
+            src.width,
+            src.height,
+            *src.bounds
+        )
+
+        profile = src.profile.copy()
+        profile.update(
+            crs=target_crs,
+            transform=transform,
+            width=width,
+            height=height,
+            nodata=NODATA,
+            compress="deflate",
+        )
+
+        temp_path = src_path.with_name(f"_{src_path.name}")
+
+        with rasterio.open(temp_path, "w", **profile) as dst:
+            reproject(
+                source=rasterio.band(src, 1),
+                destination=rasterio.band(dst, 1),
+                src_transform=src.transform,
+                src_crs=src.crs,
+                src_nodata=src.nodata,
+                dst_transform=transform,
+                dst_crs=target_crs,
+                dst_nodata=NODATA,
+                resampling=Resampling.bilinear,
+            )
+
+    # Replace original with reprojected raster
+    temp_path.replace(src_path)
+
+    print(f"Reprojected: {src_path}")
+
+
+def process_dtms(zip_path, aoi_path, output_dir, custom_file_stem=None, target_crs=None):
     """Extract, merge, and crop DNR DTMs project-by-project."""
 
     zip_path = Path(zip_path)
@@ -216,6 +272,9 @@ def process_dtms(zip_path, aoi_path, output_dir, custom_file_stem=None):
 
     # Process each project independently
     for dtm_dir in dtm_dirs:
-        process_project(dtm_dir, aoi, output_dir, custom_file_stem=custom_file_stem)
+        output_path = process_project(dtm_dir, aoi, output_dir, custom_file_stem=custom_file_stem)
+        # reproject if needed (i.e. if user specifies crs and src is not currently in this)
+        if output_path is not None and target_crs is not None:
+            reproject_dtm(output_path, target_crs)
 
     print("\nFinished processing DTMs.")

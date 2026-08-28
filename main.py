@@ -24,6 +24,11 @@ PORTAL_URL = "https://lidarportal.dnr.wa.gov"
 AOI = Path("data/nooksack1_AOI.kmz") # test with .kmz
 DOWNLOAD_ZIP = Path("downloads/custom_download.zip") #this will get created, temp folder to dump downloads
 OUTPUT_DIR = Path("cropped_dtms") #this will get created, final output folder for cropped dtms
+# optionally set a target crs to ensure all our cropped DTMs are in same crs (for crude DoD or something)
+# WA DNR crs is sometimes documented differently between datasets, usually 2927-ish thing, but let's make this consistent
+# set to None if want to keep native crs
+TARGET_CRS = "EPSG:2927"
+# TARGET_CRS = None
 
 # Optional custom output naming: helpful when you want to batch process a bunch of AOIs
 # SET TO NONE IF YOU JUST WANT DEFAULTS! (your cropped tiffs will be named with DNR project name)
@@ -62,7 +67,8 @@ def main():
         zip_path=DOWNLOAD_ZIP,
         aoi_path=AOI,
         output_dir=OUTPUT_DIR,
-        custom_file_stem=CUSTOM_FILE_STEM
+        custom_file_stem=CUSTOM_FILE_STEM,
+        target_crs=TARGET_CRS
     )
 
 if __name__ == "__main__":
