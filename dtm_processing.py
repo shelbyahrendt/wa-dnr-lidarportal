@@ -1,6 +1,7 @@
 from pathlib import Path
 import shutil
 import zipfile
+import re
 
 import geopandas as gpd
 import numpy as np
@@ -42,8 +43,10 @@ def find_dtm_projects(extract_dir):
     return dtm_dirs
 
 
-def process_project(dtm_dir, aoi, output_dir):
-    """Merge and crop one DNR DTM project."""
+def process_project(dtm_dir, aoi, output_dir, custom_file_stem=None):
+    """Merge and crop one DNR DTM project.
+    Optionally define custom file stem (helpful for batch processing naming convention)
+    """
 
     project_name = dtm_dir.parent.name
     tif_files = sorted(dtm_dir.glob("*.tif"))
@@ -158,7 +161,21 @@ def process_project(dtm_dir, aoi, output_dir):
     print(f"Elevation mean:  {valid.mean():.2f}")
 
     # Write final project DTM
-    output_path = output_dir / f"{project_name}_dtm.tif"
+    # by default name with project name
+    if custom_file_stem is None:
+        output_path = output_dir / f"{project_name}_dtm.tif"
+
+    else:
+        # Extract four-digit year from DNR project name
+        year_match = re.search(r"(?:19|20)\d{2}", project_name)
+
+        if not year_match:
+            raise ValueError(
+                f"Could not extract year from DNR project name: {project_name}"
+            )
+
+        project_year = year_match.group()
+        output_path = output_dir / f"{custom_file_stem}_dtm_{project_year}.tif"
 
     with rasterio.open(output_path, "w", **cropped_profile) as dst:
         dst.write(cropped)
@@ -166,7 +183,7 @@ def process_project(dtm_dir, aoi, output_dir):
     print(f"Saved: {output_path}")
 
 
-def process_dtms(zip_path, aoi_path, output_dir):
+def process_dtms(zip_path, aoi_path, output_dir, custom_file_stem=None):
     """Extract, merge, and crop DNR DTMs project-by-project."""
 
     zip_path = Path(zip_path)
@@ -199,6 +216,6 @@ def process_dtms(zip_path, aoi_path, output_dir):
 
     # Process each project independently
     for dtm_dir in dtm_dirs:
-        process_project(dtm_dir, aoi, output_dir)
+        process_project(dtm_dir, aoi, output_dir, custom_file_stem=custom_file_stem)
 
     print("\nFinished processing DTMs.")

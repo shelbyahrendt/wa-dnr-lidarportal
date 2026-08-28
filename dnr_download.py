@@ -1,5 +1,6 @@
 import warnings
 import requests
+from pathlib import Path
 
 import geopandas as gpd
 import json
@@ -12,7 +13,7 @@ def read_aoi_for_dnr(aoi_path):
     Parameters
     ----------
     aoi_path : Path
-        Path to the AOI shapefile.
+        Path to the AOI. may be .shp, .kmz, .kml, .gpkg
 
     Returns
     -------
@@ -20,7 +21,24 @@ def read_aoi_for_dnr(aoi_path):
         GeoJSON formatted representation of the AOI.
     """
 
-    aoi = gpd.read_file(aoi_path)
+    aoi_path = Path(aoi_path) # ensure path object
+    suffix = aoi_path.suffix.lower()
+
+    # handle kmz/kml
+    if suffix in (".kmz", ".kml"):
+        aoi = gpd.read_file(aoi_path, driver="KML")
+
+    # handle gpgk/shp
+    elif suffix in (".gpkg", ".shp"):
+        aoi = gpd.read_file(aoi_path)
+
+    # if other type
+    else:
+        raise ValueError(
+            f"Unsupported AOI file type: {suffix}. "
+            "Use .shp, .kmz, .kml, or .gpkg files."
+        )
+    
     if aoi.empty:
         raise ValueError("AOI contains no features.")
     
@@ -56,12 +74,12 @@ def read_aoi_for_dnr(aoi_path):
     return aoi_geojson
 
 
-def query_datasets(aoi_geojson):
+def query_datasets(aoi_geojson, portal_url):
     """Query DNR for datasets intersecting the AOI."""
 
     print("\nQuerying DNR LiDAR portal for datasets...")
 
-    query_url = "https://lidarportal.dnr.wa.gov/query"
+    query_url = f"{portal_url}/query"
     
     response = requests.post(
         query_url,
@@ -203,10 +221,10 @@ def choose_products(products):
     return selected_products
 
 
-def download_datasets(geojson, selected_products, output_zip):
+def download_datasets(geojson, portal_url, selected_products, output_zip):
     """Download selected datasets from DNR."""
 
-    download_url = "https://lidarportal.dnr.wa.gov/download"
+    download_url = f"{portal_url}/download"
 
     # Check we have a folder for our output zip file
     output_zip.parent.mkdir(parents=True, exist_ok=True)
