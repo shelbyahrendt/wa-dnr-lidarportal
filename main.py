@@ -12,7 +12,7 @@ from dtm_processing import process_dtms
 
 
 # --------------------------------------------------
-# Input: MODIFY ME FOR YOUR PREFERRED PATHS!
+# Input: MODIFY ME!
 # --------------------------------------------------
 
 # Define portal, should work with Alaska or Washington
