@@ -45,7 +45,7 @@ After processing is complete, check `cropped_DTMs/` for the resulting cropped DT
 
 ## Download DTMs for Your AOI
 
-Create a `.shp` or `.gpkg` file containing your polygon AOI. The AOI can use any defined CRS.
+Create a `.shp`, `.gpkg`, `.kmz`, or `.kml` file containing your polygon AOI. The AOI can use any defined CRS.
 
 Save the AOI in `data/` (or another directory of your choice).
 
@@ -75,8 +75,9 @@ The program will:
 4. Download the required DNR tiles.
 5. Merge tiles belonging to the same lidar project.
 6. Crop each project DTM to the exact AOI polygon.
-7. Save the resulting DTMs to the output directory.
+7. Ensure each DTM has a consistent projection for subsequent analyses.
+8. Save the resulting DTMs to the output directory.
 
 > **Note:** The temporary `custom_download` data are overwritten with each run. WA DNR source tiles can be very large, so we currently trash these with each run to avoid consuming all your disk space.
 
-**Warning:** If you change your AOI but do not change your output folder, lidar projects with the same name within your new AOI will overwrite your cropped .tif which may be confusing.
+> **Warning:** If you change your AOI but do not change your output folder or custom stem name, lidar projects with the same name within your new AOI will overwrite your cropped .tif which may be confusing.
